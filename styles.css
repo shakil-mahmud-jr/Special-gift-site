@@ -73,6 +73,7 @@ html, body {
 .navbar.visible {
   opacity: 1 !important;
   pointer-events: auto !important;
+  visibility: visible !important;
 }
 
 /* Main Hub Visible State */
@@ -80,6 +81,8 @@ html, body {
   opacity: 1 !important;
   transform: translateY(0) !important;
   pointer-events: auto !important;
+  visibility: visible !important;
+  display: flex !important;
 }
 
 /* Wish Granted Status Text */
