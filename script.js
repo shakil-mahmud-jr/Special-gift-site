@@ -1202,36 +1202,60 @@ function updateMusicUI() {
 }
 
 function unboxSurprise(e) {
-  if (e) {
-    if (typeof e.preventDefault === 'function') e.preventDefault();
-    if (typeof e.stopPropagation === 'function') e.stopPropagation();
-  }
-  if (isUnboxed) return;
-  isUnboxed = true;
-
-  playBackgroundMusic();
-
-  if (typeof gsap !== 'undefined' && giftLidMesh && giftBoxGroup) {
-    gsap.timeline()
-      .to(giftLidMesh.position, { y: 3.5, duration: 0.8, ease: "power2.out" })
-      .to(giftLidMesh.rotation, { x: -Math.PI / 3, z: Math.PI / 4, duration: 0.8, ease: "power2.out" }, "-=0.6")
-      .to(giftBoxGroup.position, { y: -10, opacity: 0, duration: 1, ease: "power2.in" }, "+=0.2");
-  }
-
+  // 1. Instantly hide unboxing overlay and show main hub
   const overlay = document.getElementById('unboxing-overlay');
   const mainHub = document.getElementById('main-hub');
   const navbar = document.querySelector('.navbar');
 
   if (overlay) {
     overlay.classList.add('hidden');
+    overlay.style.opacity = '0';
+    overlay.style.pointerEvents = 'none';
+    overlay.style.visibility = 'hidden';
     setTimeout(() => {
       overlay.style.display = 'none';
-    }, 400);
+    }, 300);
   }
-  if (mainHub) mainHub.classList.add('visible');
-  if (navbar) navbar.classList.add('visible');
+  if (mainHub) {
+    mainHub.classList.add('visible');
+    mainHub.style.opacity = '1';
+    mainHub.style.pointerEvents = 'auto';
+    mainHub.style.transform = 'translateY(0)';
+  }
+  if (navbar) {
+    navbar.classList.add('visible');
+    navbar.style.opacity = '1';
+    navbar.style.pointerEvents = 'auto';
+  }
 
-  triggerConfettiFireworks();
+  if (isUnboxed) return;
+  isUnboxed = true;
+
+  // 2. Play 3D gift box animation
+  if (typeof gsap !== 'undefined' && giftLidMesh && giftBoxGroup) {
+    try {
+      gsap.timeline()
+        .to(giftLidMesh.position, { y: 3.5, duration: 0.8, ease: "power2.out" })
+        .to(giftLidMesh.rotation, { x: -Math.PI / 3, z: Math.PI / 4, duration: 0.8, ease: "power2.out" }, "-=0.6")
+        .to(giftBoxGroup.position, { y: -10, opacity: 0, duration: 1, ease: "power2.in" }, "+=0.2");
+    } catch (err) {
+      console.warn('GSAP gift box animation error:', err);
+    }
+  }
+
+  // 3. Play background music safely
+  try {
+    playBackgroundMusic();
+  } catch (err) {
+    console.warn('Music autoplay error:', err);
+  }
+
+  // 4. Trigger confetti fireworks safely
+  try {
+    triggerConfettiFireworks();
+  } catch (err) {
+    console.warn('Confetti error:', err);
+  }
 }
 window.unboxSurprise = unboxSurprise;
 
@@ -1331,11 +1355,9 @@ function loadSavedPhotos() {
 function setupEventListeners() {
   const openBoxBtn = document.getElementById('open-box-btn');
   if (openBoxBtn) {
-    ['click', 'touchend', 'pointerdown'].forEach((evtType) => {
-      openBoxBtn.addEventListener(evtType, (e) => {
-        unboxSurprise(e);
-      }, { passive: false });
-    });
+    openBoxBtn.onclick = function(e) {
+      unboxSurprise(e);
+    };
   }
 
   const blowBtn = document.getElementById('blow-candles-btn');
