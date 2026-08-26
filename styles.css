@@ -1,0 +1,222 @@
+/* ----------------------------------------------------
+   Birthday Celebration — Smooth Performance & Photorealistic 3D Cake
+   Hardware Acceleration & Butter-Smooth 60FPS Transitions
+---------------------------------------------------- */
+
+/* Custom Typography & Line-Height Collision Protection */
+.font-script {
+  font-family: 'Great Vibes', cursive;
+  line-height: 1.5 !important;
+  padding-bottom: 0.25rem !important;
+  display: block;
+}
+
+.font-heading {
+  font-family: 'Playfair Display', Georgia, serif;
+  line-height: 1.35 !important;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0E0B16;
+}
+::-webkit-scrollbar-thumb {
+  background: #FF4D6D;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #A855F7;
+}
+
+/* Hardware Acceleration & Smooth Rendering Optimization */
+.glass-card, .unboxing-card-wrapper, .navbar, .pulse-btn {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* ----------------------------------------------------
+   SCENE & TRANSITION VISIBILITY RULES (CRITICAL)
+---------------------------------------------------- */
+
+/* Unboxing Overlay Hidden State */
+#unboxing-overlay.hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  display: none !important;
+}
+
+/* Navbar Visible State */
+.navbar.visible {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+/* Main Hub Visible State */
+#main-hub.visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+}
+
+/* Wish Granted Status Text */
+#wish-status-text.visible {
+  opacity: 1 !important;
+}
+
+/* Modal Overlay Display Isolation */
+.modal-overlay {
+  display: none !important;
+  opacity: 0;
+  pointer-events: none !important;
+}
+
+.modal-overlay.active {
+  display: flex !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.modal-overlay:not(.active) * {
+  pointer-events: none !important;
+}
+
+/* ----------------------------------------------------
+   3D POLAROID WALL CORKBOARD & FLIP STYLES
+---------------------------------------------------- */
+.corkboard-container {
+  background: radial-gradient(circle, #2d183b 0%, #150a1d 100%);
+  border: 10px solid #3d234d;
+  box-shadow: inset 0 0 50px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.5);
+  position: relative;
+  overflow: hidden;
+  min-height: 480px;
+  border-radius: 1.5rem;
+}
+
+.polaroid-drag-card {
+  perspective: 1000px;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  position: absolute;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease;
+  width: 220px;
+  height: 270px;
+}
+
+.polaroid-drag-card:active {
+  cursor: grabbing;
+  z-index: 100 !important;
+}
+
+.polaroid-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-style: preserve-3d;
+}
+
+.polaroid-drag-card.flipped .polaroid-inner {
+  transform: rotateY(180deg);
+}
+
+.polaroid-front, .polaroid-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.polaroid-back {
+  transform: rotateY(180deg);
+  background: #fffdf9;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #1e1b4b;
+  border: 2px dashed #FF4D6D;
+  padding: 16px;
+}
+
+/* Wax Seal Envelope Badge */
+.wax-seal-badge {
+  background: radial-gradient(circle, #e11d48 0%, #9f1239 100%);
+  box-shadow: 0 0 15px rgba(225, 29, 72, 0.6);
+}
+
+/* ----------------------------------------------------
+   ANIMATIONS & KEYFRAMES
+---------------------------------------------------- */
+@keyframes floatCard {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulseRing {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.18); opacity: 0; }
+}
+
+@keyframes wavePulse {
+  from { height: 10px; }
+  to { height: 36px; }
+}
+
+.unboxing-card-wrapper {
+  animation: floatCard 4.5s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+.pulse-btn::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50px;
+  border: 2px solid #FFD700;
+  opacity: 0.75;
+  animation: pulseRing 2s infinite ease-out;
+  pointer-events: none !important;
+}
+
+/* Waveform Pulse in Voice Note Player */
+.waveform-container.playing .waveform-bar {
+  animation: wavePulse 1s ease-in-out infinite alternate;
+}
+.waveform-container.playing .waveform-bar:nth-child(2n) { animation-delay: 0.2s; }
+.waveform-container.playing .waveform-bar:nth-child(3n) { animation-delay: 0.4s; }
+.waveform-container.playing .waveform-bar:nth-child(4n) { animation-delay: 0.1s; }
+
+/* Coupon Redeemed Styling State */
+.coupon-card.redeemed {
+  background: rgba(255, 77, 109, 0.18) !important;
+  border-style: solid !important;
+  border-color: #FF4D6D !important;
+}
+
+.coupon-card.redeemed .redeem-btn {
+  background: linear-gradient(135deg, #A855F7 0%, #EC4899 100%) !important;
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4) !important;
+  pointer-events: none !important;
+}
+
+/* Fluid Mobile Layout Adjustments */
+@media (max-width: 640px) {
+  .timeline-path::before { left: 16px; }
+  .timeline-item { width: 100% !important; padding-left: 45px !important; text-align: left !important; }
+  .timeline-item.right { left: 0 !important; }
+  .timeline-dot { left: 6px !important; }
+}

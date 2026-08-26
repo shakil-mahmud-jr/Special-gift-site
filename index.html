@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Happy Birthday My Love! ✨ 27th August</title>
+  <meta name="description" content="An interactive 3D birthday celebration & romantic love story for my beautiful wife.">
+  <meta name="theme-color" content="#1D0A24">
+
+  <!-- SVG Heart Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💖</text></svg>">
+
+  <!-- TailwindCSS v3 via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            roseGold: '#FF758C',
+            rosePink: '#FF4D6D',
+            goldAccent: '#FFD700',
+            violetGlow: '#EC4899',
+            midnightDark: '#1D0A24',
+            midnightCard: '#240D2E',
+          },
+          fontFamily: {
+            heading: ['Playfair Display', 'Georgia', 'serif'],
+            script: ['Great Vibes', 'cursive'],
+            body: ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          boxShadow: {
+            'glow-rose': '0 0 45px rgba(236, 72, 153, 0.6)',
+            'glow-gold': '0 0 45px rgba(255, 215, 0, 0.55)',
+            'glass': '0 25px 60px rgba(0, 0, 0, 0.75), inset 0 0 25px rgba(255, 255, 255, 0.08)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;0,800;0,900;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- External 3D & Animation Libraries (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body class="bg-gradient-to-br from-[#1D0A24] via-[#320F3B] to-[#110517] text-slate-100 font-body min-h-screen overflow-x-hidden selection:bg-pink-500 selection:text-white">
+
+  <!-- Fullscreen 3D WebGL Background Scene -->
+  <canvas id="webgl-canvas" class="fixed inset-0 w-full h-full z-0 pointer-events-auto" aria-label="3D Background Canvas"></canvas>
+
+  <!-- Background Music Audio Element -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="music/WhatsApp%20Audio%202026-08-26%20at%2013.46.41.mpeg" type="audio/mpeg">
+    <source src="music/WhatsApp Audio 2026-08-26 at 13.46.41.mpeg" type="audio/mpeg">
+  </audio>
+
+  <!-- Floating Glassmorphic Music Player Widget -->
+  <div id="music-widget" class="fixed bottom-5 right-5 z-40 transition-all duration-500 pointer-events-auto">
+    <div class="glass-panel rounded-full p-2 pr-5 flex items-center gap-3 shadow-2xl border border-pink-500/30 bg-[#240D2E]/90 backdrop-blur-xl hover:border-pink-400/60">
+      <div id="vinylDisc" class="w-11 h-11 rounded-full overflow-hidden border-2 border-amber-400 relative flex-shrink-0 animate-spin-vinyl paused shadow-md cursor-pointer" onclick="window.togglePlayMusic()">
+        <img src="images/photo1.jpg" alt="Music Cover" class="w-full h-full object-cover">
+        <div class="absolute inset-0 m-auto w-3 h-3 bg-slate-900 rounded-full border border-amber-400"></div>
+      </div>
+      <div class="hidden sm:flex flex-col">
+        <span class="text-[10px] text-pink-300 font-bold tracking-wider uppercase flex items-center gap-1">
+          🎵 Our Melody
+        </span>
+        <span id="musicStatusText" class="text-xs text-slate-200 font-medium">Click to Play Music</span>
+      </div>
+      <button id="playPauseBtn" onclick="window.togglePlayMusic()" class="w-9 h-9 rounded-full bg-gradient-to-r from-pink-500 to-amber-400 flex items-center justify-center text-white shadow-lg hover:scale-110 active:scale-95 transition-transform" title="Play/Pause Music">
+        <span id="playIcon">▶️</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Floating Atmospheric Particle Switcher Widget -->
+  <div id="atmosphere-widget" class="fixed top-20 right-4 z-40 flex flex-col gap-2 pointer-events-auto">
+    <div class="glass-panel p-2 rounded-2xl flex flex-col gap-2 shadow-2xl border border-pink-500/30 bg-[#240D2E]/90 backdrop-blur-xl text-xs">
+      <span class="text-[10px] text-pink-300 font-extrabold uppercase tracking-wider text-center px-1">Atmosphere</span>
+      <button data-mode="hearts" onclick="window.switchParticleAtmosphere('hearts')" class="mode-btn p-2 rounded-xl bg-pink-500/20 text-pink-200 flex items-center gap-2 transition hover:bg-pink-500/40" title="Floating Hearts">
+        <span>💖</span> <span class="hidden sm:inline font-bold">Hearts</span>
+      </button>
+      <button data-mode="rose" onclick="window.switchParticleAtmosphere('rose')" class="mode-btn p-2 rounded-xl text-pink-200 flex items-center gap-2 transition hover:bg-pink-500/40" title="Red Rose Petals">
+        <span>🌹</span> <span class="hidden sm:inline font-bold">Roses</span>
+      </button>
+      <button data-mode="sakura" onclick="window.switchParticleAtmosphere('sakura')" class="mode-btn p-2 rounded-xl text-pink-200 flex items-center gap-2 transition hover:bg-pink-500/40" title="Sakura Blossoms">
+        <span>🌸</span> <span class="hidden sm:inline font-bold">Sakura</span>
+      </button>
+      <button data-mode="gold" onclick="window.switchParticleAtmosphere('gold')" class="mode-btn p-2 rounded-xl text-amber-200 flex items-center gap-2 transition hover:bg-pink-500/40" title="Gold Sparkles">
+        <span>✨</span> <span class="hidden sm:inline font-bold">Sparkles</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Application Wrapper -->
+  <div class="app-container relative z-10 w-full min-h-screen pointer-events-none">
+
+    <!-- SCENE 1: ELEGANT RESPONSIVE UNBOXING OVERLAY -->
+    <div id="unboxing-overlay" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-[#110517]/90 backdrop-blur-2xl transition-all duration-700 pointer-events-auto">
+      <div class="unboxing-card-wrapper max-w-lg w-full p-0.5 bg-gradient-to-r from-pink-500 via-purple-500 to-rose-500 rounded-[32px] shadow-glow-rose transition-transform duration-300 ease-out">
+        <div class="bg-[#240D2E]/95 backdrop-blur-2xl rounded-[30px] p-6 sm:p-8 md:p-10 text-center relative z-10 border border-pink-400/30">
+          
+          <!-- Glowing Date Badge -->
+          <div class="inline-flex items-center gap-1.5 px-4.5 py-1.5 mb-5 bg-gradient-to-r from-pink-500/20 via-purple-500/20 to-rose-500/20 border border-pink-400/50 rounded-full text-[11px] sm:text-xs font-extrabold tracking-widest text-pink-300 uppercase shadow-glow-rose">
+            <span>✨ AUGUST 27TH • HAPPY BIRTHDAY MY QUEEN ✨</span>
+          </div>
+
+          <!-- Elegant Calligraphic Script -->
+          <p class="font-script text-4xl sm:text-5xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-rose-200 to-amber-200 mb-4 sm:mb-5 leading-relaxed drop-shadow-[0_0_20px_rgba(236,72,153,0.6)]">
+            For My Dearest Wife...
+          </p>
+
+          <!-- Serif Main Title -->
+          <h1 class="font-heading text-2xl sm:text-3xl md:text-4xl font-black text-white mb-3 leading-tight drop-shadow-md tracking-tight">
+            A Journey Crafted With All My Heart
+          </h1>
+
+          <!-- Subtitle -->
+          <p class="text-xs sm:text-sm text-purple-200/80 mb-7 max-w-xs sm:max-w-sm mx-auto leading-relaxed">
+            Tap the button below or click the 3D gift box to open your birthday surprise...
+          </p>
+
+          <!-- Glowing Action Button -->
+          <div class="unboxing-instruction relative z-20">
+            <button id="open-box-btn" class="pulse-btn inline-flex items-center justify-center gap-2.5 px-7 sm:px-9 py-3.5 sm:py-4 bg-gradient-to-r from-rose-500 via-pink-500 to-purple-600 text-white font-black text-sm sm:text-base rounded-full shadow-glow-rose hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer" onclick="window.unboxSurprise()" aria-label="Open 3D Gift Box">
+              <span>🎁 Tap to Open Your Surprise</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- RESPONSIVE FLOATING NAVBAR -->
+    <header class="fixed top-3 left-0 right-0 z-40 px-3 sm:px-4 pointer-events-none">
+      <nav class="navbar max-w-3xl mx-auto bg-[#240D2E]/85 backdrop-blur-xl border border-pink-500/30 shadow-xl rounded-full px-4 sm:px-6 py-2.5 flex items-center justify-between opacity-0 pointer-events-none transition-all duration-500">
+        <a href="#" class="font-script text-xl sm:text-2xl text-pink-300 font-bold drop-shadow hover:text-white transition-colors">Happy Birthday 💖</a>
+        <div class="nav-controls flex items-center gap-1.5 sm:gap-2">
+          <button class="px-3 py-1.5 rounded-full bg-white/10 border border-pink-400/30 text-xs font-bold text-slate-100 flex items-center gap-1.5 hover:bg-pink-500/20 transition-all" onclick="scrollToSection('.gallery-section')">
+            <span>📸</span> <span class="hidden sm:inline">Memories</span>
+          </button>
+          <button class="px-3 py-1.5 rounded-full bg-white/10 border border-pink-400/30 text-xs font-bold text-slate-100 flex items-center gap-1.5 hover:bg-pink-500/20 transition-all" onclick="scrollToSection('.spotlight-section')">
+            <span>🖼️</span> <span class="hidden sm:inline">Spotlight</span>
+          </button>
+          <button class="px-3 py-1.5 rounded-full bg-gradient-to-r from-pink-500/20 to-purple-500/20 border border-pink-400/50 text-xs font-bold text-pink-300 flex items-center gap-1.5 hover:bg-pink-500/30 transition-all" onclick="scrollToSection('.wallpaper-section')">
+            <span>📱</span> <span class="hidden sm:inline">Wallpaper</span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- MAIN HUB CONTENT (OPTIMIZED NARRATIVE FLOW) -->
+    <main id="main-hub" class="interactive-ui opacity-0 translate-y-6 transition-all duration-1000 pt-24 pb-16 w-11/12 max-w-4xl mx-auto flex flex-col gap-10 sm:gap-14">
+
+      <!-- ACT I: HERO GREETING SECTION -->
+      <section class="hero-section glass-card p-6 sm:p-8 md:p-10 text-center rounded-3xl bg-[#240D2E]/80 backdrop-blur-xl border border-pink-500/30 shadow-glass hover:border-pink-400/50 transition-all">
+        <div class="inline-flex items-center gap-1.5 px-4 py-1.5 mb-4 bg-pink-500/10 border border-pink-400/30 rounded-full text-[11px] sm:text-xs font-bold text-pink-300 uppercase tracking-wider">
+          <span>💖 AUGUST 27TH CELEBRATION 💖</span>
+        </div>
+        <p class="font-script text-3xl sm:text-4xl md:text-5xl text-pink-300 mb-3 sm:mb-4 leading-relaxed drop-shadow">Celebrating You Today & Always</p>
+        
+        <h1 class="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold mb-5 bg-gradient-to-r from-white via-pink-200 to-rose-300 bg-clip-text text-transparent leading-snug sm:leading-normal drop-shadow pt-1">
+          <span class="block sm:inline-block">Happy Birthday,&nbsp;</span>
+          <span id="display-wife-name" class="editable-name border-b-2 border-dashed border-pink-400 px-2 outline-none cursor-pointer text-pink-300 hover:text-white transition-colors inline-block mt-1" contenteditable="true" role="textbox" aria-label="Wife's Name">My Princess</span> 👑
+        </h1>
+
+        <p class="text-xs sm:text-sm md:text-base text-purple-200/90 max-w-xl mx-auto mb-6 leading-relaxed">
+          You bring warmth, radiance, and magic into my life every single day. 
+          May your birthday be as beautiful, sweet, and wonderful as you are!
+        </p>
+
+        <div class="flex justify-center gap-3 flex-wrap">
+          <button onclick="scrollToSection('.cake-section')" class="px-6 sm:px-8 py-3 bg-gradient-to-r from-rose-500 via-pink-500 to-purple-600 text-white font-extrabold text-xs sm:text-sm rounded-full shadow-glow-rose hover:scale-105 active:scale-95 transition-transform">
+            🎂 Make a Birthday Wish
+          </button>
+          <button onclick="scrollToSection('.wallpaper-section')" class="px-5 sm:px-6 py-3 bg-white/10 border border-pink-400/40 rounded-full font-bold text-xs sm:text-sm text-pink-200 hover:bg-pink-500/20 transition-all">
+            📱 Download Mobile Keepsake
+          </button>
+        </div>
+      </section>
+
+      <!-- ACT I: LIVE LOVE TICKER (MARCH 23, 2020 TILL TODAY) -->
+      <section class="ticker-section text-center">
+        <div class="ticker-card glass-card p-6 sm:p-8 md:p-10 rounded-3xl bg-[#240D2E]/80 backdrop-blur-xl border border-pink-500/30 shadow-glass">
+          <span class="text-[11px] sm:text-xs font-extrabold tracking-widest uppercase text-pink-300 mb-1.5 block">Endless Love Ticker</span>
+          <h2 class="font-heading text-xl sm:text-2xl md:text-3xl font-extrabold mb-2 text-white">Counting Every Second I've Loved You ⏳</h2>
+          <p class="text-xs sm:text-sm text-purple-200/80 mb-6 max-w-md mx-auto">Every moment with you since March 23, 2020 is a gift I cherish deeply.</p>
+
+          <div class="ticker-grid grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 my-6">
+            <div class="ticker-box bg-[#15071C]/80 border border-pink-400/30 rounded-2xl p-4 sm:p-5 shadow-inner">
+              <span id="ticker-days" class="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold text-pink-300 block drop-shadow">00</span>
+              <span class="text-[10px] sm:text-xs font-bold tracking-wider uppercase text-purple-200/70 mt-1 block">Days</span>
+            </div>
+            <div class="ticker-box bg-[#15071C]/80 border border-pink-400/30 rounded-2xl p-4 sm:p-5 shadow-inner">
+              <span id="ticker-hours" class="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold text-pink-300 block drop-shadow">00</span>
+              <span class="text-[10px] sm:text-xs font-bold tracking-wider uppercase text-purple-200/70 mt-1 block">Hours</span>
+            </div>
+            <div class="ticker-box bg-[#15071C]/80 border border-pink-400/30 rounded-2xl p-4 sm:p-5 shadow-inner">
+              <span id="ticker-mins" class="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold text-pink-300 block drop-shadow">00</span>
+              <span class="text-[10px] sm:text-xs font-bold tracking-wider uppercase text-purple-200/70 mt-1 block">Minutes</span>
+            </div>
+            <div class="ticker-box bg-[#15071C]/80 border border-pink-400/30 rounded-2xl p-4 sm:p-5 shadow-inner">
+              <span id="ticker-secs" class="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold text-pink-300 block drop-shadow">00</span>
+              <span class="text-[10px] sm:text-xs font-bold tracking-wider uppercase text-purple-200/70 mt-1 block">Seconds</span>
+            </div>
+          </div>
+
+          <div class="date-picker-row inline-flex items-center gap-2.5 text-xs text-purple-200/80 bg-[#15071C]/70 border border-pink-400/30 rounded-full px-5 py-1.5">
+            <label for="anniversary-date-input" class="font-semibold">Anniversary Date:</label>
+            <input type="date" id="anniversary-date-input" value="2020-03-23" class="bg-slate-900 border border-pink-400/40 rounded-full px-3 py-1 text-pink-300 font-bold outline-none focus:ring-1 focus:ring-pink-400" onchange="updateAnniversaryDate(this.value)">
+          </div>
+        </div>
+      </section>
+
+      <!-- ACT II: BALANCED 3x2 PHOTO GALLERY -->
+      <section class="gallery-section text-center">
+        <span class="text-[11px] sm:text-xs font-extrabold tracking-widest uppercase text-pink-300 mb-1.5 block">Memory Lane</span>
+        <h2 class="font-heading text-2xl sm:text-3xl md:text-4xl font-extrabold mb-8 text-white">Our Romantic Journey 📸</h2>
+        
+        <div class="gallery-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div class="photo-card glass-card p-4 rounded-3xl bg-[#240D2E]/80 backdrop-blur-xl border border-pink-500/30 shadow-glass cursor-pointer hover:-translate-y-1.5 transition-all relative" onclick="triggerPhotoUpload(1)">
+            <span class="change-photo-badge absolute top-5 right-5 px-2.5 py-1 bg-black/80 text-white text-[10px] rounded-full opacity-0 hover:opacity-100 transition-opacity">📸 Click to Swap</span>
+            <div class="photo-frame aspect-[3/4] rounded-2xl overflow-hidden mb-3 border border-pink-400/30">
+              <img id="gallery-photo-1" src="images/photo1.jpg" alt="Bridal Kiss on Forehead" class="w-full h-full object-cover" loading="lazy">
+            </div>
+            <p class="photo-caption text-xs sm:text-sm font-bold text-center text-white">Forehead Kiss & Forever Love 💋</p>
+          </div>
+
+          <div class="photo-card glass-card p-4 rounded-3xl bg-[#240D2E]/80 backdrop-blur-xl border border-pink-500/30 shadow-glass cursor-pointer hover:-translate-y-1.5 transition-all relative" onclick="triggerPhotoUpload(2)">
+            <span class="change-photo-badge absolute top-5 right-5 px-2.5 py-1 bg-black/80 text-white text-[10px] rounded-full opacity-0 hover:opacity-100 transition-opacity">📸 Click to Swap</span>
+            <div class="photo-frame aspect-[3/4] rounded-2xl overflow-hidden mb-3 border border-pink-400/30">
+              <img id="gallery-photo-2" src="images/photo2.jpg" alt="Bridal Couple Standing" class="w-full h-full object-cover" loading="lazy">
+            </div>
+            <p class="photo-caption text-xs sm:text-sm font-bold text-center text-white">Traditional Grace & Elegance 👑</p>
+          </div>
+
+          <div class="photo-card glass-card p-4 rounded-3xl bg-[#240D2E]/80 backdrop-blur-xl border border-pink-500/30 shadow-glass cursor-pointer hover:-translate-y-1.5 transition-all relative" onclick="triggerPhotoUpload(3)">
+            <span class="change-photo-badge absolute top-5 right-5 px-2.5 py-1 bg-black/80 text-white text-[10px] rounded-full opacity-0 hover:opacity-100 transition-opacity">📸 Click to Swap</span>
+            <div class="photo-frame aspect-[3/4] rounded-2xl overflow-hidden mb-3 border border-pink-400/30">
+              <img id="gallery-photo-3" src="images/photo3.jpg" alt="Navy Suit & Purple Veil" class="w-full h-full object-cover" loading="lazy">
+            </div>
+            <p class="photo-caption text-xs sm:text-sm font-bold text-center text-white">Side by Side Always 💜</p>
+          </div>
+
+          <div class="photo-card glass-card p-4 rounded-3xl bg-[#240D2E]/80 backdrop-blur-xl border border-pink-500/30 shadow-glass cursor-pointer hover:-translate-y-1.5 transition-all relative" onclick="triggerPhotoUpload(4)">
+            <span class="change-photo-badge absolute top-5 right-5 px-2.5 py-1 bg-black/80 text-white text-[10px] rounded-full opacity-0 hover:opacity-100 transition-opacity">📸 Click to Swap</span>
+            <div class="photo-frame aspect-[3/4] rounded-2xl overflow-hidden mb-3 border border-pink-400/30">
+              <img id="gallery-photo-4" src="images/photo4.jpg" alt="Rooftop Lift Hug" class="w-full h-full object-cover" loading="lazy">
+            </div>
+            <p class="photo-caption text-xs sm:text-sm font-bold text-center text-white">Swept Off Your Feet ✨</p>
+          </div>
+
+          <div class="photo-card glass-card p-4 rounded-3xl bg-[#240D2E]/80 backdrop-blur-xl border border-pink-500/30 shadow-glass cursor-pointer hover:-translate-y-1.5 transition-all relative" onclick="triggerPhotoUpload(5)">
+            <span class="change-photo-badge absolute top-5 right-5 px-2.5 py-1 bg-black/80 text-white text-[10px] rounded-full opacity-0 hover:opacity-100 transition-opacity">📸 Click to Swap</span>
+            <div class="photo-frame aspect-[3/4] rounded-2xl overflow-hidden mb-3 border border-pink-400/30">
+              <img id="gallery-photo-5" src="images/photo5.jpg" alt="Walking Hand in Hand" class="w-full h-full object-cover" loading="lazy">
+            </div>
+            <p class="photo-caption text-xs sm:text-sm font-bold text-center text-white">Walking Into Forever 🌅</p>
+          </div>
+
+          <div class="photo-card glass-card p-4 rounded-3xl bg-[#240D2E]/80 backdrop-blur-xl border border-pink-500/30 shadow-glass cursor-pointer hover:-translate-y-1.5 transition-all relative" onclick="triggerPhotoUpload(6)">
+            <span class="change-photo-badge absolute top-5 right-5 px-2.5 py-1 bg-black/80 text-white text-[10px] rounded-full opacity-0 hover:opacity-100 transition-opacity">📸 Click to Swap</span>
+            <div class="photo-frame aspect-[3/4] rounded-2xl overflow-hidden mb-3 border border-pink-400/30">
+              <img id="gallery-photo-6" src="images/photo6.jpg" alt="Magical Moment Together" class="w-full h-full object-cover" loading="lazy">
+            </div>
+            <p class="photo-caption text-xs sm:text-sm font-bold text-center text-white">Our Endless Happiness 💞</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- BRAND NEW DEDICATED SECTION: "MOMENTS FROZEN IN TIME" SPOTLIGHT CARD DECK -->
+      <section class="spotlight-section text-center">
+        <div class="spotlight-card glass-card p-6 sm:p-8 md:p-10 rounded-3xl bg-gradient-to-br from-[#240D2E]/90 via-[#360F42]/90 to-[#1D0A24]/90 backdrop-blur-xl border-2 border-pink-500/40 shadow-glass">
+          
+          <div class="inline-flex items-center gap-1.5 px-4 py-1.5 mb-3 bg-pink-500/15 border border-pink-400/40 rounded-full text-[11px] sm:text-xs font-extrabold text-pink-300 uppercase tracking-widest shadow-glow-rose">
+            <span>🖼️ SPECIAL PHOTO SPOTLIGHT 🖼️</span>
+          </div>
+
+          <h2 class="font-heading text-2xl sm:text-3xl md:text-4xl font-extrabold mb-2 text-white">
+            Moments Frozen In Time ✨
+          </h2>
+          <p class="text-xs sm:text-sm text-purple-200/90 mb-8 max-w-md mx-auto">
+            A romantic spotlight deck celebrating our most precious memories together.
+          </p>
+
+          <!-- Interactive Polaroid Spotlight Card -->
+          <div class="polaroid-spotlight max-w-md mx-auto bg-white/95 p-4 sm:p-5 rounded-2xl shadow-2xl text-slate-900 transition-transform duration-500 hover:rotate-1 hover:scale-105 border-4 border-pink-400/40 relative">
+            <div class="tape-accent absolute -top-3 left-1/2 -translate-x-1/2 w-28 h-6 bg-amber-200/80 shadow rotate-1 rounded-sm"></div>
+            
+            <!-- Photo Frame with Prev / Next Arrow Controls -->
+            <div class="spotlight-img-frame aspect-[4/5] rounded-xl overflow-hidden mb-4 border border-slate-200 shadow-inner relative group">
+              <img id="spotlight-hero-img" src="images/photo1.jpg" alt="Spotlight Romantic Couple" class="w-full h-full object-cover">
+              
+              <!-- Prev Arrow Button -->
+              <button onclick="window.nextSpotlightPhoto(-1)" class="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-pink-600 text-white font-bold flex items-center justify-center text-sm backdrop-blur-md shadow-lg transition-all opacity-80 hover:opacity-100 hover:scale-110" title="Previous Photo">
+                ◀
+              </button>
+              
+              <!-- Next Arrow Button -->
+              <button onclick="window.nextSpotlightPhoto(1)" class="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-pink-600 text-white font-bold flex items-center justify-center text-sm backdrop-blur-md shadow-lg transition-all opacity-80 hover:opacity-100 hover:scale-110" title="Next Photo">
+                ▶
+              </button>
+
+              <!-- Photo Counter Badge -->
+              <div id="spotlight-counter-badge" class="absolute bottom-2 right-2 px-2.5 py-1 rounded-full bg-black/70 text-white text-[10px] font-bold backdrop-blur-md">
+                1 / 6
+              </div>
+            </div>
+
+            <p id="spotlight-caption-text" class="font-script text-2xl sm:text-3xl text-pink-600 font-bold text-center leading-tight">
+              "Forehead Kiss & Forever Love" 💋
+            </p>
+
+            <!-- 6 Photo Buttons (1 to 6) -->
+            <div class="spotlight-controls flex justify-center flex-wrap gap-1.5 mt-4 pt-3 border-t border-slate-200">
+              <button id="spotlight-btn-1" class="spotlight-pill-btn px-2.5 py-1 bg-pink-500 text-white rounded-full text-xs font-bold hover:bg-pink-600 transition-colors shadow-sm ring-2 ring-pink-400" onclick="switchSpotlightPhoto(1)">Photo 1</button>
+              <button id="spotlight-btn-2" class="spotlight-pill-btn px-2.5 py-1 bg-slate-200 text-slate-700 rounded-full text-xs font-bold hover:bg-pink-500 hover:text-white transition-colors shadow-sm" onclick="switchSpotlightPhoto(2)">Photo 2</button>
+              <button id="spotlight-btn-3" class="spotlight-pill-btn px-2.5 py-1 bg-slate-200 text-slate-700 rounded-full text-xs font-bold hover:bg-pink-500 hover:text-white transition-colors shadow-sm" onclick="switchSpotlightPhoto(3)">Photo 3</button>
+              <button id="spotlight-btn-4" class="spotlight-pill-btn px-2.5 py-1 bg-slate-200 text-slate-700 rounded-full text-xs font-bold hover:bg-pink-500 hover:text-white transition-colors shadow-sm" onclick="switchSpotlightPhoto(4)">Photo 4</button>
+              <button id="spotlight-btn-5" class="spotlight-pill-btn px-2.5 py-1 bg-slate-200 text-slate-700 rounded-full text-xs font-bold hover:bg-pink-500 hover:text-white transition-colors shadow-sm" onclick="switchSpotlightPhoto(5)">Photo 5</button>
+              <button id="spotlight-btn-6" class="spotlight-pill-btn px-2.5 py-1 bg-slate-200 text-slate-700 rounded-full text-xs font-bold hover:bg-pink-500 hover:text-white transition-colors shadow-sm" onclick="switchSpotlightPhoto(6)">Photo 6</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ACT III: DRAG & FLIP 3D POLAROID CORKBOARD WALL -->
+      <section class="polaroid-corkboard-section text-center">
+        <span class="text-[11px] sm:text-xs font-extrabold tracking-widest uppercase text-pink-300 mb-1.5 block">Interactive Corkboard</span>
+        <h2 class="font-heading text-2xl sm:text-3xl md:text-4xl font-extrabold mb-2 text-white">Our Drag & 3D Flip Polaroid Wall 📸</h2>
+        <p class="text-xs sm:text-sm text-purple-200/80 mb-6">Drag photos freely across the board! Tap any polaroid to flip it and read the note on the back ❤️</p>
+
+        <div id="corkboard-wall" class="corkboard-container w-full max-w-3xl mx-auto">
+          <!-- Polaroid 1 -->
+          <div class="polaroid-drag-card" style="left: 30px; top: 30px; transform: rotate(-5deg);">
+            <div class="polaroid-inner">
+              <div class="polaroid-front">
+                <img src="images/photo1.jpg" alt="Polaroid 1" class="w-full h-44 object-cover rounded-lg">
+                <span class="block text-center font-script text-xl text-slate-800 mt-2 font-bold">Sweet Memories 💖</span>
+              </div>
+              <div class="polaroid-back">
+                <p class="font-script text-2xl text-slate-900 leading-snug">"You make every single day feel like a magical dream come true!"</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Polaroid 2 -->
+          <div class="polaroid-drag-card" style="left: 270px; top: 70px; transform: rotate(4deg);">
+            <div class="polaroid-inner">
+              <div class="polaroid-front">
+                <img src="images/photo2.jpg" alt="Polaroid 2" class="w-full h-44 object-cover rounded-lg">
+                <span class="block text-center font-script text-xl text-slate-800 mt-2 font-bold">Our Journeys ✈️</span>
+              </div>
+              <div class="polaroid-back">
+                <p class="font-script text-2xl text-slate-900 leading-snug">"The world is so gorgeous when I get to explore it hand-in-hand with you."</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Polaroid 3 -->
+          <div class="polaroid-drag-card" style="left: 500px; top: 30px; transform: rotate(-3deg);">
+            <div class="polaroid-inner">
+              <div class="polaroid-front">
+                <img src="images/photo3.jpg" alt="Polaroid 3" class="w-full h-44 object-cover rounded-lg">
+                <span class="block text-center font-script text-xl text-slate-800 mt-2 font-bold">My Sunshine ☀️</span>
+              </div>
+              <div class="polaroid-back">
+                <p class="font-script text-2xl text-slate-900 leading-snug">"Your smile and happiness are my absolute favorite things in the world!"</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACT II: 3D ROTATING PHOTO MEMORY CUBE -->
+      <section class="cube-section text-center">
+        <span class="text-[11px] sm:text-xs font-extrabold tracking-widest uppercase text-pink-300 mb-1.5 block">3D Interactive Memories</span>
+        <h2 class="font-heading text-2xl sm:text-3xl md:text-4xl font-extrabold mb-2 text-white">Spin Our 3D Memory Cube 🎲</h2>
+        <p class="text-xs sm:text-sm text-purple-200/80 mb-6">Drag with your mouse or finger to spin our photos in 3D space!</p>
+
+        <div class="cube-container-wrapper glass-card w-full max-w-md h-80 sm:h-96 mx-auto rounded-3xl bg-[#240D2E]/80 backdrop-blur-xl border border-pink-500/30 shadow-glass">
+          <canvas id="photo-cube-canvas" class="w-full h-full cursor-grab active:cursor-grabbing" aria-label="Interactive 3D Photo Cube"></canvas>
+        </div>
+      </section>
+
+      <!-- ACT II: "OUR STORY" MILESTONE TIMELINE -->
+      <section class="timeline-section text-center">
+        <span class="text-[11px] sm:text-xs font-extrabold tracking-widest uppercase text-pink-300 mb-1.5 block">Our Chapter Book</span>
+        <h2 class="font-heading text-2xl sm:text-3xl md:text-4xl font-extrabold mb-8 text-white">Our Story So Far 🗺️</h2>
+
+        <div class="timeline-path relative max-w-2xl mx-auto my-4 py-2">
+          <div class="timeline-line absolute top-0 bottom-0 left-1/2 w-1 bg-gradient-to-b from-rose-500 via-purple-500 to-pink-500 -translate-x-1/2 rounded-full"></div>
+
+          <div class="timeline-item relative w-1/2 p-4 sm:p-5 left-0 text-right pr-6 sm:pr-8">
+            <div class="timeline-dot absolute top-6 -right-2.5 w-5 h-5 rounded-full bg-pink-400 border-4 border-slate-950 shadow-glow-rose"></div>
+            <div class="text-[11px] font-bold text-pink-300 mb-1">Phase I • March 23, 2020</div>
+            <h3 class="font-heading text-base sm:text-lg font-bold text-white mb-1">The Day Our Journey Began</h3>
+            <p class="text-xs text-purple-200/80">The magical day our paths crossed and my life changed forever for the better.</p>
+          </div>
+
+          <div class="timeline-item relative w-1/2 p-4 sm:p-5 left-1/2 text-left pl-6 sm:pl-8">
+            <div class="timeline-dot absolute top-6 -left-2.5 w-5 h-5 rounded-full bg-pink-400 border-4 border-slate-950 shadow-glow-rose"></div>
+            <div class="text-[11px] font-bold text-pink-300 mb-1">Phase II • The Spark</div>
+            <h3 class="font-heading text-base sm:text-lg font-bold text-white mb-1">Our Unforgettable First Date</h3>
+            <p class="text-xs text-purple-200/80">Hours felt like minutes as we talked, laughed, and realized how special this was.</p>
+          </div>
+
+          <div class="timeline-item relative w-1/2 p-4 sm:p-5 left-0 text-right pr-6 sm:pr-8">
+            <div class="timeline-dot absolute top-6 -right-2.5 w-5 h-5 rounded-full bg-pink-400 border-4 border-slate-950 shadow-glow-rose"></div>
+            <div class="text-[11px] font-bold text-pink-300 mb-1">Phase III • Forever Promise</div>
+            <h3 class="font-heading text-base sm:text-lg font-bold text-white mb-1">Tying The Knot</h3>
+            <p class="text-xs text-purple-200/80">Choosing you for a lifetime and promising to love, protect, and cherish you always.</p>
+          </div>
+
+          <div class="timeline-item relative w-1/2 p-4 sm:p-5 left-1/2 text-left pl-6 sm:pl-8">
+            <div class="timeline-dot absolute top-6 -left-2.5 w-5 h-5 rounded-full bg-pink-400 border-4 border-slate-950 shadow-glow-rose"></div>
+            <div class="text-[11px] font-bold text-pink-300 mb-1">Today • August 27th</div>
+            <h3 class="font-heading text-base sm:text-lg font-bold text-white mb-1">Celebrating You Today</h3>
+            <p class="text-xs text-purple-200/80">Here's to celebrating your birthday, your joy, and our endless adventure together!</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACT III: INTERACTIVE 3D CAKE & CANDLE BLOW FIREWORKS -->
+      <section class="cake-section text-center">
+        <span class="text-[11px] sm:text-xs font-extrabold tracking-widest uppercase text-pink-300 mb-1.5 block">Interactive Wish Maker</span>
+        <h2 class="font-heading text-2xl sm:text-3xl md:text-4xl font-extrabold mb-6 text-white">Make a Wish & Blow The Candles</h2>
+        
+        <div class="cake-wrapper glass-card w-full max-w-lg h-80 sm:h-96 mx-auto mb-6 rounded-3xl bg-[#240D2E]/80 backdrop-blur-xl border border-pink-500/30 shadow-glass overflow-hidden">
+          <div id="cake-canvas-container" class="w-full h-full"></div>
+        </div>
+
+        <div class="wish-action-container">
+          <button id="blow-candles-btn" class="px-7 sm:px-9 py-3.5 bg-gradient-to-r from-rose-500 via-pink-500 to-purple-600 text-white font-black text-xs sm:text-sm rounded-full shadow-glow-rose hover:scale-105 active:scale-95 transition-transform inline-flex items-center gap-2">
+            <span>🎂</span>
+            <span class="btn-text">Tap to Blow Out Candles & Make a Wish!</span>
+          </button>
+          <div id="wish-status-text" class="wish-status text-pink-300 font-bold text-sm sm:text-base mt-3 opacity-0 transition-opacity">
+            ✨ Wish Granted! May all your dreams come true today and forever! ✨
+          </div>
+        </div>
+      </section>
+
+      <!-- ACT III: 100 REASONS WHY I LOVE YOU (JAR) -->
+      <section class="jar-section text-center">
+        <span class="text-[11px] sm:text-xs font-extrabold tracking-widest uppercase text-pink-300 mb-1.5 block">Endless Reasons</span>
+        <h2 class="font-heading text-2xl sm:text-3xl md:text-4xl font-extrabold mb-6 text-white">Why I Love You Jar 🌟</h2>
+
+        <div class="jar-wrapper glass-card p-6 sm:p-8 md:p-10 rounded-3xl bg-[#240D2E]/80 backdrop-blur-xl border border-pink-500/30 shadow-glass">
+          <div class="jar-icon-display text-5xl sm:text-6xl mb-3 animate-bounce">🫙✨</div>
+          <p class="text-xs sm:text-sm text-purple-200/80 mb-6">Tap the button below to draw a capsule card from the jar!</p>
+
+          <div id="reason-display" class="reason-card-display min-h-[90px] flex items-center justify-center p-5 bg-[#15071C]/80 border border-pink-400/30 rounded-2xl font-heading text-base sm:text-lg text-pink-200 my-6 shadow-inner">
+            "Tap the button below to reveal a capsule..."
+          </div>
+
+          <button id="draw-reason-btn" class="px-7 sm:px-9 py-3 bg-gradient-to-r from-rose-500 via-pink-500 to-purple-600 text-white font-extrabold text-xs sm:text-sm rounded-full shadow-glow-rose hover:scale-105 active:scale-95 transition-transform">
+            <span>✨ Draw a Reason Card</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ACT III: CUSTOMIZED BIRTHDAY LOVE COUPONS (FRESH RESTART ON LOAD) -->
+      <section class="coupons-section text-center">
+        <span class="text-[11px] sm:text-xs font-extrabold tracking-widest uppercase text-pink-300 mb-1.5 block">Birthday Treats</span>
+        <h2 class="font-heading text-2xl sm:text-3xl md:text-4xl font-extrabold mb-2 text-white">Your Birthday Love Coupons 🎟️</h2>
+        <p class="text-xs sm:text-sm text-purple-200/80 mb-8">Click "Redeem Coupon" anytime during the year to claim your reward!</p>
+
+        <div class="coupons-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 items-stretch">
+          
+          <!-- COUPON 1: Morning Coffee With You -->
+          <div class="coupon-card glass-card p-5 sm:p-6 rounded-3xl bg-[#240D2E]/80 backdrop-blur-xl border-2 border-dashed border-pink-400/40 shadow-glass flex flex-col justify-between items-center h-full min-h-[310px] hover:-translate-y-1.5 hover:border-pink-400 transition-all duration-300" id="coupon-1">
+            <div class="coupon-content-wrapper flex flex-col items-center w-full flex-grow">
+              <span class="text-4xl mb-3">☕</span>
+              <h3 class="font-heading text-lg font-bold mb-2 min-h-[2.8rem] flex items-center justify-center text-center text-white">Morning Coffee With You</h3>
+              <p class="text-xs text-purple-200/80 leading-relaxed mb-4 flex-grow flex items-center justify-center text-center">A quiet, cozy morning sipping your favorite freshly brewed coffee together, just the two of us.</p>
+            </div>
+            <button class="redeem-btn w-full max-w-[180px] py-2.5 px-4 bg-gradient-to-r from-rose-500 to-purple-600 text-white text-xs font-extrabold rounded-full shadow-glow-rose hover:scale-105 active:scale-95 transition-transform mt-auto" onclick="redeemCoupon(1)">Redeem Coupon ✨</button>
+          </div>
+
+          <!-- COUPON 2: 30-Min Relaxing Massage -->
+          <div class="coupon-card glass-card p-5 sm:p-6 rounded-3xl bg-[#240D2E]/80 backdrop-blur-xl border-2 border-dashed border-pink-400/40 shadow-glass flex flex-col justify-between items-center h-full min-h-[310px] hover:-translate-y-1.5 hover:border-pink-400 transition-all duration-300" id="coupon-2">
+            <div class="coupon-content-wrapper flex flex-col items-center w-full flex-grow">
+              <span class="text-4xl mb-3">💆</span>
+              <h3 class="font-heading text-lg font-bold mb-2 min-h-[2.8rem] flex items-center justify-center text-center text-white">30-Min Relaxing Massage</h3>
+              <p class="text-xs text-purple-200/80 leading-relaxed mb-4 flex-grow flex items-center justify-center text-center">A soothing, stress-relieving massage whenever you feel tired or want to relax.</p>
+            </div>
+            <button class="redeem-btn w-full max-w-[180px] py-2.5 px-4 bg-gradient-to-r from-rose-500 to-purple-600 text-white text-xs font-extrabold rounded-full shadow-glow-rose hover:scale-105 active:scale-95 transition-transform mt-auto" onclick="redeemCoupon(2)">Redeem Coupon ✨</button>
+          </div>
+
+          <!-- COUPON 3: Movie Night Pick -->
+          <div class="coupon-card glass-card p-5 sm:p-6 rounded-3xl bg-[#240D2E]/80 backdrop-blur-xl border-2 border-dashed border-pink-400/40 shadow-glass flex flex-col justify-between items-center h-full min-h-[310px] hover:-translate-y-1.5 hover:border-pink-400 transition-all duration-300" id="coupon-3">
+            <div class="coupon-content-wrapper flex flex-col items-center w-full flex-grow">
+              <span class="text-4xl mb-3">🎬</span>
+              <h3 class="font-heading text-lg font-bold mb-2 min-h-[2.8rem] flex items-center justify-center text-center text-white">Movie Night Pick</h3>
+              <p class="text-xs text-purple-200/80 leading-relaxed mb-4 flex-grow flex items-center justify-center text-center">You choose the movie, and I will prepare your favorite snacks, popcorn, and cozy blankets!</p>
+            </div>
+            <button class="redeem-btn w-full max-w-[180px] py-2.5 px-4 bg-gradient-to-r from-rose-500 to-purple-600 text-white text-xs font-extrabold rounded-full shadow-glow-rose hover:scale-105 active:scale-95 transition-transform mt-auto" onclick="redeemCoupon(3)">Redeem Coupon ✨</button>
+          </div>
+
+          <!-- COUPON 4: Candlelit Home Dinner -->
+          <div class="coupon-card glass-card p-5 sm:p-6 rounded-3xl bg-[#240D2E]/80 backdrop-blur-xl border-2 border-dashed border-pink-400/40 shadow-glass flex flex-col justify-between items-center h-full min-h-[310px] hover:-translate-y-1.5 hover:border-pink-400 transition-all duration-300" id="coupon-4">
+            <div class="coupon-content-wrapper flex flex-col items-center w-full flex-grow">
+              <span class="text-4xl mb-3">🕯️</span>
+              <h3 class="font-heading text-lg font-bold mb-2 min-h-[2.8rem] flex items-center justify-center text-center text-white">Candlelit Home Dinner</h3>
+              <p class="text-xs text-purple-200/80 leading-relaxed mb-4 flex-grow flex items-center justify-center text-center">A romantic, intimate candlelit dinner cooked with love and served right at home, just for you.</p>
+            </div>
+            <button class="redeem-btn w-full max-w-[180px] py-2.5 px-4 bg-gradient-to-r from-rose-500 to-purple-600 text-white text-xs font-extrabold rounded-full shadow-glow-rose hover:scale-105 active:scale-95 transition-transform mt-auto" onclick="redeemCoupon(4)">Redeem Coupon ✨</button>
+          </div>
+
+          <!-- COUPON 5: Your Wish Is My Command -->
+          <div class="coupon-card glass-card p-5 sm:p-6 rounded-3xl bg-[#240D2E]/80 backdrop-blur-xl border-2 border-dashed border-pink-400/40 shadow-glass flex flex-col justify-between items-center h-full min-h-[310px] hover:-translate-y-1.5 hover:border-pink-400 transition-all duration-300" id="coupon-5">
+            <div class="coupon-content-wrapper flex flex-col items-center w-full flex-grow">
+              <span class="text-4xl mb-3">👑</span>
+              <h3 class="font-heading text-lg font-bold mb-2 min-h-[2.8rem] flex items-center justify-center text-center text-white">Your Wish Is My Command</h3>
+              <p class="text-xs text-purple-200/80 leading-relaxed mb-4 flex-grow flex items-center justify-center text-center">Redeemable for any single sweet favor, surprise, or wish of your choice, no questions asked!</p>
+            </div>
+            <button class="redeem-btn w-full max-w-[180px] py-2.5 px-4 bg-gradient-to-r from-rose-500 to-purple-600 text-white text-xs font-extrabold rounded-full shadow-glow-rose hover:scale-105 active:scale-95 transition-transform mt-auto" onclick="redeemCoupon(5)">Redeem Coupon ✨</button>
+          </div>
+
+          <!-- COUPON 6: Coffee Date at IZ -->
+          <div class="coupon-card glass-card p-5 sm:p-6 rounded-3xl bg-[#240D2E]/80 backdrop-blur-xl border-2 border-dashed border-pink-400/40 shadow-glass flex flex-col justify-between items-center h-full min-h-[310px] hover:-translate-y-1.5 hover:border-pink-400 transition-all duration-300" id="coupon-6">
+            <div class="coupon-content-wrapper flex flex-col items-center w-full flex-grow">
+              <span class="text-4xl mb-3">☕✨</span>
+              <h3 class="font-heading text-lg font-bold mb-2 min-h-[2.8rem] flex items-center justify-center text-center text-white">Coffee Date at IZ</h3>
+              <p class="text-xs text-purple-200/80 leading-relaxed mb-4 flex-grow flex items-center justify-center text-center">We will go out to IZ for a delicious coffee date and sweet quality time together.</p>
+            </div>
+            <button class="redeem-btn w-full max-w-[180px] py-2.5 px-4 bg-gradient-to-r from-rose-500 to-purple-600 text-white text-xs font-extrabold rounded-full shadow-glow-rose hover:scale-105 active:scale-95 transition-transform mt-auto" onclick="redeemCoupon(6)">Redeem Coupon ✨</button>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ACT VI: "OPEN WHEN..." TIME CAPSULE LETTERS -->
+      <section class="timecapsule-section text-center">
+        <span class="text-[11px] sm:text-xs font-extrabold tracking-widest uppercase text-pink-300 mb-1.5 block">Sealed Keepsakes</span>
+        <h2 class="font-heading text-2xl sm:text-3xl md:text-4xl font-extrabold mb-2 text-white">"Open When..." Time Capsule Letters 🔮</h2>
+        <p class="text-xs sm:text-sm text-purple-200/80 mb-8">Tap any wax-sealed letter card to read a special message written from my heart.</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div onclick="window.openTimeCapsule('miss')" class="glass-card p-6 rounded-3xl bg-[#240D2E]/80 backdrop-blur-xl border border-pink-500/30 shadow-glass cursor-pointer hover:scale-105 hover:border-pink-400 transition-all text-center">
+            <div class="w-14 h-14 mx-auto mb-3 rounded-full wax-seal-badge flex items-center justify-center text-white text-2xl shadow-lg">✉️</div>
+            <h3 class="font-heading text-base font-bold text-white mb-1">Open When...</h3>
+            <p class="text-xs text-pink-300 font-bold">You Miss Me ❤️</p>
+          </div>
+
+          <div onclick="window.openTimeCapsule('hug')" class="glass-card p-6 rounded-3xl bg-[#240D2E]/80 backdrop-blur-xl border border-pink-500/30 shadow-glass cursor-pointer hover:scale-105 hover:border-pink-400 transition-all text-center">
+            <div class="w-14 h-14 mx-auto mb-3 rounded-full wax-seal-badge flex items-center justify-center text-white text-2xl shadow-lg">🤗</div>
+            <h3 class="font-heading text-base font-bold text-white mb-1">Open When...</h3>
+            <p class="text-xs text-pink-300 font-bold">You Need A Warm Hug</p>
+          </div>
+
+          <div onclick="window.openTimeCapsule('birthday')" class="glass-card p-6 rounded-3xl bg-[#240D2E]/80 backdrop-blur-xl border border-pink-500/30 shadow-glass cursor-pointer hover:scale-105 hover:border-pink-400 transition-all text-center">
+            <div class="w-14 h-14 mx-auto mb-3 rounded-full wax-seal-badge flex items-center justify-center text-white text-2xl shadow-lg">🎂</div>
+            <h3 class="font-heading text-base font-bold text-white mb-1">Open On...</h3>
+            <p class="text-xs text-pink-300 font-bold">Your Birthday 🎉</p>
+          </div>
+
+          <div onclick="window.openTimeCapsule('tough')" class="glass-card p-6 rounded-3xl bg-[#240D2E]/80 backdrop-blur-xl border border-pink-500/30 shadow-glass cursor-pointer hover:scale-105 hover:border-pink-400 transition-all text-center">
+            <div class="w-14 h-14 mx-auto mb-3 rounded-full wax-seal-badge flex items-center justify-center text-white text-2xl shadow-lg">🌸</div>
+            <h3 class="font-heading text-base font-bold text-white mb-1">Open On...</h3>
+            <p class="text-xs text-pink-300 font-bold">A Tough Day</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACT IV: GRAND KEEPSAKE WALLPAPER GENERATOR -->
+      <section class="wallpaper-section text-center">
+        <div class="wallpaper-card glass-card p-6 sm:p-8 md:p-10 rounded-3xl bg-[#240D2E]/85 backdrop-blur-xl border-2 border-pink-500/40 shadow-glass hover:border-pink-400/60 transition-all">
+          
+          <div class="inline-flex items-center gap-1.5 px-4 py-1.5 mb-3 bg-pink-500/15 border border-pink-400/40 rounded-full text-[11px] sm:text-xs font-extrabold text-pink-300 uppercase tracking-widest shadow-glow-rose">
+            <span>💖 EXCLUSIVE MOBILE KEEPSAKE 💖</span>
+          </div>
+
+          <div class="heart-badge-icon text-5xl sm:text-6xl my-3 animate-pulse">💖✨</div>
+
+          <h2 class="font-heading text-xl sm:text-2xl md:text-3xl font-extrabold mb-2 text-white">
+            Grand Rectangular Mobile Lockscreen Card 📱
+          </h2>
+
+          <p class="text-xs sm:text-sm text-purple-200/90 mb-7 max-w-sm sm:max-w-md mx-auto leading-relaxed">
+            Generates an HD 1080x1920 mobile lockscreen wallpaper featuring all 3 of your romantic couple photos, Love Ticker stats, and August 27th birthday celebration title with zero clipping!
+          </p>
+
+          <button id="download-wallpaper-btn" class="px-8 sm:px-10 py-3.5 bg-gradient-to-r from-rose-500 via-pink-500 to-purple-600 text-white font-extrabold text-xs sm:text-sm rounded-full shadow-glow-rose hover:scale-105 active:scale-95 transition-transform inline-flex items-center gap-2.5">
+            <span>📸 Download Grand Mobile Wallpaper Card</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ACT IV: ROMANTIC LOVE LETTER CARD (CLIMAX) -->
+      <section class="letter-section">
+        <div class="letter-card glass-card p-6 sm:p-8 md:p-12 rounded-3xl bg-gradient-to-br from-[#240D2E]/95 via-[#3B1148]/95 to-[#1D0A24]/95 border-2 border-pink-500/40 shadow-glass">
+          <h2 class="letter-header font-script text-4xl sm:text-5xl text-pink-300 mb-6 drop-shadow">Dearest Love & My Sweet Princess 👑,</h2>
+          
+          <div class="letter-body text-sm sm:text-base md:text-lg leading-relaxed text-purple-100/90 space-y-4 mb-8 font-body text-left">
+            <p>
+              On this magical day, August 27th, the entire universe aligned to bring the most beautiful, caring, and angelic soul into the world—<strong class="text-pink-300">YOU</strong>. From the moment you entered my life on March 23, 2020, every single day has felt like a breathtaking dream. Your smile lights up my darkest days, your tender warmth heals my heart, and your gentle laughter is my absolute favorite sound in the whole wide world.
+            </p>
+            <p>
+              You are not just my wife; you are my best friend, my soulmate, my safe haven, and my greatest blessing. Thank you for your endless kindness, your unconditional love, and for making our home a sanctuary of peace, warmth, and pure joy. In your eyes, I see my entire future, and in your arms, I have found my true home.
+            </p>
+            <p>
+              On your birthday, I promise to cherish you even more, to hold your hand through every journey, to protect your beautiful smile, and to love you more deeply with every single breath I take. May this new year of your life bring you endless laughter, glowing health, eternal happiness, and all the magical dreams your sweet heart desires!
+            </p>
+          </div>
+
+          <div class="letter-signature font-script text-3xl sm:text-4xl text-pink-300 text-right drop-shadow">Forever & Always Yours, ❤️</div>
+        </div>
+      </section>
+
+      <footer class="text-center py-8 text-xs text-purple-200/60 font-semibold">
+        <p>Crafted with endless love for your special day • August 27th Birthday Celebration</p>
+      </footer>
+
+    </main>
+
+  </div>
+
+  <!-- FULLSCREEN PHOTO LIGHTBOX MODAL -->
+  <div id="lightbox-modal" class="modal-overlay fixed inset-0 z-50 bg-black/90 backdrop-blur-2xl hidden opacity-0 pointer-events-none transition-opacity duration-300 flex flex-col items-center justify-center p-4">
+    <div class="relative max-w-3xl w-full max-h-[85vh] flex flex-col items-center justify-center text-center">
+      <button class="absolute -top-10 right-0 sm:right-4 text-3xl text-white/80 hover:text-white transition-colors" onclick="window.closeLightbox()" aria-label="Close Lightbox">✕</button>
+      <div class="photo-frame max-h-[70vh] rounded-2xl overflow-hidden border-2 border-pink-400/40 shadow-2xl mb-4">
+        <img id="lightbox-img" src="images/photo1.jpg" alt="Enlarged Photo" class="max-h-[70vh] w-auto object-contain rounded-2xl">
+      </div>
+      <p id="lightbox-caption" class="font-script text-2xl sm:text-3xl text-pink-300 font-bold drop-shadow">Photo Caption</p>
+    </div>
+  </div>
+
+  <!-- TIME CAPSULE LETTER MODAL -->
+  <div id="timecapsule-modal" class="modal-overlay fixed inset-0 z-50 bg-black/85 backdrop-blur-2xl hidden opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+    <div class="modal-content glass-card p-6 sm:p-8 max-w-lg w-full rounded-3xl bg-[#240D2E] border border-pink-400/40 shadow-2xl relative text-white text-center">
+      <button class="modal-close absolute top-4 right-4 text-2xl text-purple-200/70 hover:text-white transition-colors" onclick="window.closeTimeCapsule()" aria-label="Close modal">✕</button>
+      <div class="w-16 h-16 mx-auto mb-4 rounded-full wax-seal-badge flex items-center justify-center text-white text-3xl shadow-lg">💌</div>
+      <h3 id="capsule-modal-title" class="font-heading text-xl sm:text-2xl font-bold mb-3 text-pink-300">Letter Title</h3>
+      <p id="capsule-modal-body" class="text-xs sm:text-sm text-purple-100/90 leading-relaxed mb-6 whitespace-pre-line font-body">Letter message...</p>
+      <button onclick="window.closeTimeCapsule()" class="px-6 py-2.5 bg-gradient-to-r from-rose-500 to-purple-600 text-white font-extrabold text-xs rounded-full shadow-glow-rose hover:scale-105 transition-transform">Close Letter ❤️</button>
+    </div>
+  </div>
+
+  <!-- PHOTO UPLOAD MODAL -->
+  <div id="photo-upload-modal" class="modal-overlay fixed inset-0 z-50 bg-black/85 backdrop-blur-2xl hidden opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4">
+    <div class="modal-content glass-card p-6 sm:p-8 max-w-md w-full rounded-3xl bg-[#240D2E] border border-pink-400/40 shadow-2xl relative text-white">
+      <button class="modal-close absolute top-4 right-4 text-2xl text-purple-200/70 hover:text-white transition-colors" onclick="closePhotoModal()" aria-label="Close modal">✕</button>
+      <h3 class="font-heading text-xl sm:text-2xl font-bold mb-2">Upload Your Couple Picture 📸</h3>
+      <p class="text-xs text-purple-200/80 mb-6">Select a photo from your phone or computer to display on the page.</p>
+
+      <div class="upload-area border-2 border-dashed border-pink-400/40 rounded-2xl p-6 sm:p-8 text-center cursor-pointer bg-white/5 hover:bg-white/10 transition-colors" onclick="document.getElementById('file-input-element').click()">
+        <div class="upload-icon text-4xl text-pink-300 mb-2">📁</div>
+        <p class="text-sm font-bold">Click to Choose Photo File</p>
+        <p class="text-xs text-purple-200/60 mt-1">Supports JPG, PNG, WEBP</p>
+      </div>
+
+      <input type="file" id="file-input-element" accept="image/*" class="hidden" onchange="handleFileSelected(event)">
+    </div>
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script src="script.js"></script>
+</body>
+</html>
