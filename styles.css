@@ -105,6 +105,21 @@ html, body {
   border-radius: 1.5rem;
 }
 
+.cube-container-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative;
+  overflow: hidden;
+}
+
+#photo-cube-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  margin: 0 auto !important;
+}
+
 .polaroid-drag-card {
   perspective: 1000px;
   cursor: grab;

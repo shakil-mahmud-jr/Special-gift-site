@@ -719,8 +719,9 @@ function initPhotoCubeScene() {
 
   cubeScene = new THREE.Scene();
   cubeCamera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100);
-  const initialCamZ = window.innerWidth < 640 ? 6.4 : 5.4;
+  const initialCamZ = window.innerWidth < 640 ? 4.6 : 4.2;
   cubeCamera.position.set(0, 0, initialCamZ);
+  cubeCamera.lookAt(0, 0, 0);
 
   cubeRenderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
   cubeRenderer.setSize(w, h);
@@ -737,8 +738,9 @@ function initPhotoCubeScene() {
     cubeMaterials.push(new THREE.MeshBasicMaterial({ map: tex }));
   }
 
-  const geometry = new THREE.BoxGeometry(1.9, 1.9, 1.9);
+  const geometry = new THREE.BoxGeometry(2.1, 2.1, 2.1);
   photoCubeMesh = new THREE.Mesh(geometry, cubeMaterials);
+  photoCubeMesh.position.set(0, 0, 0);
   cubeScene.add(photoCubeMesh);
 
   canvas.addEventListener('mousedown', (e) => { isDraggingCube = true; previousMousePosition = { x: e.clientX, y: e.clientY }; });
@@ -1376,7 +1378,7 @@ function onWindowResize() {
       const w = wrapper.clientWidth;
       const h = wrapper.clientHeight;
       cubeCamera.aspect = w / h;
-      cubeCamera.position.z = window.innerWidth < 640 ? 6.4 : 5.4;
+      cubeCamera.position.z = window.innerWidth < 640 ? 4.6 : 4.2;
       cubeCamera.updateProjectionMatrix();
       cubeRenderer.setSize(w, h);
     }
