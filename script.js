@@ -592,6 +592,15 @@ function initCakeThreeScene() {
 /* ----------------------------------------------------
    3. FEATURE: SPOTLIGHT PHOTO SWITCHER HELPER (SUPPORTS ALL 6 PHOTOS)
 ---------------------------------------------------- */
+const spotlightCaptions = {
+  1: '"Forehead Kiss & Forever Love" 💋',
+  2: '"Traditional Grace & Elegance" 👑',
+  3: '"Side by Side Always & Forever" 💜',
+  4: '"In your arms, I have found my home." ❤️',
+  5: '"Watching the sunset with you, my forever light." 🌅',
+  6: '"Side-by-side, making every path feel like paradise!" ✌️💖'
+};
+
 let currentSpotlightIdx = 1;
 
 function switchSpotlightPhoto(photoIdx) {
@@ -1192,7 +1201,11 @@ function updateMusicUI() {
   }
 }
 
-function unboxSurprise() {
+function unboxSurprise(e) {
+  if (e) {
+    if (typeof e.preventDefault === 'function') e.preventDefault();
+    if (typeof e.stopPropagation === 'function') e.stopPropagation();
+  }
   if (isUnboxed) return;
   isUnboxed = true;
 
@@ -1220,6 +1233,7 @@ function unboxSurprise() {
 
   triggerConfettiFireworks();
 }
+window.unboxSurprise = unboxSurprise;
 
 function blowOutCandles() {
   if (!candlesLit) return;
@@ -1316,7 +1330,13 @@ function loadSavedPhotos() {
 
 function setupEventListeners() {
   const openBoxBtn = document.getElementById('open-box-btn');
-  if (openBoxBtn) openBoxBtn.addEventListener('click', unboxSurprise);
+  if (openBoxBtn) {
+    ['click', 'touchend', 'pointerdown'].forEach((evtType) => {
+      openBoxBtn.addEventListener(evtType, (e) => {
+        unboxSurprise(e);
+      }, { passive: false });
+    });
+  }
 
   const blowBtn = document.getElementById('blow-candles-btn');
   if (blowBtn) blowBtn.addEventListener('click', blowOutCandles);
@@ -1524,8 +1544,8 @@ const galleryCaptions = {
   2: 'Traditional Grace & Elegance 👑',
   3: 'Side by Side Always & Forever 💜',
   4: 'Swept Off Your Feet & Deeply Loved ✨',
-  5: 'Walking Into Forever Together 🌅',
-  6: 'Our Endless Happiness & Joy 💞'
+  5: 'Sunset Silhouette & Serene Peace 🌅',
+  6: 'Side-by-Side Smiles & Pure Joy ✌️💖'
 };
 
 function openLightbox(slotIndex) {
