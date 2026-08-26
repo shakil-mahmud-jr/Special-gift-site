@@ -82,21 +82,21 @@
     </div>
   </div>
 
-  <!-- Floating Atmospheric Particle Switcher Widget -->
-  <div id="atmosphere-widget" class="fixed top-20 right-4 z-40 flex flex-col gap-2 pointer-events-auto">
-    <div class="glass-panel p-2 rounded-2xl flex flex-col gap-2 shadow-2xl border border-pink-500/30 bg-[#240D2E]/90 backdrop-blur-xl text-xs">
-      <span class="text-[10px] text-pink-300 font-extrabold uppercase tracking-wider text-center px-1">Atmosphere</span>
-      <button data-mode="hearts" onclick="window.switchParticleAtmosphere('hearts')" class="mode-btn p-2 rounded-xl bg-pink-500/20 text-pink-200 flex items-center gap-2 transition hover:bg-pink-500/40" title="Floating Hearts">
-        <span>💖</span> <span class="hidden sm:inline font-bold">Hearts</span>
+  <!-- Floating Atmospheric Particle Switcher Widget (Mobile Compact) -->
+  <div id="atmosphere-widget" class="fixed top-16 right-2 sm:top-20 sm:right-4 z-40 flex flex-row sm:flex-col gap-1 pointer-events-auto">
+    <div class="glass-panel p-1.5 sm:p-2 rounded-2xl flex flex-row sm:flex-col gap-1 sm:gap-2 shadow-2xl border border-pink-500/30 bg-[#240D2E]/95 backdrop-blur-xl text-xs">
+      <span class="hidden sm:block text-[10px] text-pink-300 font-extrabold uppercase tracking-wider text-center px-1">Atmosphere</span>
+      <button data-mode="hearts" onclick="window.switchParticleAtmosphere('hearts')" class="mode-btn p-1.5 sm:p-2 rounded-xl bg-pink-500/20 text-pink-200 flex items-center gap-1 sm:gap-2 transition hover:bg-pink-500/40" title="Floating Hearts">
+        <span>💖</span> <span class="hidden md:inline font-bold">Hearts</span>
       </button>
-      <button data-mode="rose" onclick="window.switchParticleAtmosphere('rose')" class="mode-btn p-2 rounded-xl text-pink-200 flex items-center gap-2 transition hover:bg-pink-500/40" title="Red Rose Petals">
-        <span>🌹</span> <span class="hidden sm:inline font-bold">Roses</span>
+      <button data-mode="rose" onclick="window.switchParticleAtmosphere('rose')" class="mode-btn p-1.5 sm:p-2 rounded-xl text-pink-200 flex items-center gap-1 sm:gap-2 transition hover:bg-pink-500/40" title="Red Rose Petals">
+        <span>🌹</span> <span class="hidden md:inline font-bold">Roses</span>
       </button>
-      <button data-mode="sakura" onclick="window.switchParticleAtmosphere('sakura')" class="mode-btn p-2 rounded-xl text-pink-200 flex items-center gap-2 transition hover:bg-pink-500/40" title="Sakura Blossoms">
-        <span>🌸</span> <span class="hidden sm:inline font-bold">Sakura</span>
+      <button data-mode="sakura" onclick="window.switchParticleAtmosphere('sakura')" class="mode-btn p-1.5 sm:p-2 rounded-xl text-pink-200 flex items-center gap-1 sm:gap-2 transition hover:bg-pink-500/40" title="Sakura Blossoms">
+        <span>🌸</span> <span class="hidden md:inline font-bold">Sakura</span>
       </button>
-      <button data-mode="gold" onclick="window.switchParticleAtmosphere('gold')" class="mode-btn p-2 rounded-xl text-amber-200 flex items-center gap-2 transition hover:bg-pink-500/40" title="Gold Sparkles">
-        <span>✨</span> <span class="hidden sm:inline font-bold">Sparkles</span>
+      <button data-mode="gold" onclick="window.switchParticleAtmosphere('gold')" class="mode-btn p-1.5 sm:p-2 rounded-xl text-amber-200 flex items-center gap-1 sm:gap-2 transition hover:bg-pink-500/40" title="Gold Sparkles">
+        <span>✨</span> <span class="hidden md:inline font-bold">Sparkles</span>
       </button>
     </div>
   </div>

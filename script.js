@@ -1416,8 +1416,16 @@ function initPolaroidCorkboardWall() {
 
         if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
           isDragging = true;
-          card.style.left = `${initialLeft + dx}px`;
-          card.style.top = `${initialTop + dy}px`;
+          const wallWidth = wall.clientWidth;
+          const wallHeight = wall.clientHeight;
+          const cardWidth = card.offsetWidth;
+          const cardHeight = card.offsetHeight;
+
+          let newLeft = Math.max(0, Math.min(initialLeft + dx, wallWidth - cardWidth));
+          let newTop = Math.max(0, Math.min(initialTop + dy, wallHeight - cardHeight));
+
+          card.style.left = `${newLeft}px`;
+          card.style.top = `${newTop}px`;
         }
       };
 
