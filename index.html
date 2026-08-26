@@ -43,6 +43,45 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;0,800;0,900;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Instant Unboxing Script -->
+  <script>
+    window.unboxSurprise = function(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      var overlay = document.getElementById('unboxing-overlay');
+      var mainHub = document.getElementById('main-hub');
+      var navbar = document.querySelector('.navbar');
+
+      if (overlay) {
+        overlay.classList.add('hidden');
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+        overlay.style.visibility = 'hidden';
+        overlay.style.display = 'none';
+      }
+      if (mainHub) {
+        mainHub.classList.add('visible');
+        mainHub.style.opacity = '1';
+        mainHub.style.pointerEvents = 'auto';
+        mainHub.style.transform = 'translateY(0)';
+        mainHub.style.visibility = 'visible';
+        mainHub.style.display = 'flex';
+      }
+      if (navbar) {
+        navbar.classList.add('visible');
+        navbar.style.opacity = '1';
+        navbar.style.pointerEvents = 'auto';
+        navbar.style.visibility = 'visible';
+      }
+
+      if (window.playBackgroundMusic) {
+        try { window.playBackgroundMusic(); } catch(err) {}
+      }
+      if (window.triggerConfettiFireworks) {
+        try { window.triggerConfettiFireworks(); } catch(err) {}
+      }
+    };
+  </script>
   
   <!-- CSS Stylesheet -->
   <link rel="stylesheet" href="styles.css">
@@ -131,7 +170,7 @@
 
           <!-- Glowing Action Button -->
           <div class="unboxing-instruction relative z-20">
-            <button id="open-box-btn" class="pulse-btn inline-flex items-center justify-center gap-2.5 px-7 sm:px-9 py-3.5 sm:py-4 bg-gradient-to-r from-rose-500 via-pink-500 to-purple-600 text-white font-black text-sm sm:text-base rounded-full shadow-glow-rose hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer pointer-events-auto" onclick="if(window.unboxSurprise) window.unboxSurprise(event)" aria-label="Open 3D Gift Box">
+            <button id="open-box-btn" class="pulse-btn inline-flex items-center justify-center gap-2.5 px-7 sm:px-9 py-3.5 sm:py-4 bg-gradient-to-r from-rose-500 via-pink-500 to-purple-600 text-white font-black text-sm sm:text-base rounded-full shadow-glow-rose hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer pointer-events-auto" onclick="window.unboxSurprise(event)" aria-label="Open 3D Gift Box">
               <span>🎁 Tap to Open Your Surprise</span>
             </button>
           </div>
