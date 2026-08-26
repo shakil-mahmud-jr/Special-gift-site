@@ -49,19 +49,7 @@ html, body {
    SCENE & TRANSITION VISIBILITY RULES (CRITICAL)
 ---------------------------------------------------- */
 
-/* Unboxing Overlay Active & Hidden States */
-#unboxing-overlay {
-  pointer-events: auto !important;
-  z-index: 99999 !important;
-}
-
-#open-box-btn {
-  pointer-events: auto !important;
-  cursor: pointer !important;
-  position: relative !important;
-  z-index: 100000 !important;
-}
-
+/* Unboxing Overlay Hidden State */
 #unboxing-overlay.hidden {
   opacity: 0 !important;
   visibility: hidden !important;
@@ -73,7 +61,6 @@ html, body {
 .navbar.visible {
   opacity: 1 !important;
   pointer-events: auto !important;
-  visibility: visible !important;
 }
 
 /* Main Hub Visible State */
@@ -81,8 +68,6 @@ html, body {
   opacity: 1 !important;
   transform: translateY(0) !important;
   pointer-events: auto !important;
-  visibility: visible !important;
-  display: flex !important;
 }
 
 /* Wish Granted Status Text */

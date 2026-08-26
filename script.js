@@ -592,15 +592,6 @@ function initCakeThreeScene() {
 /* ----------------------------------------------------
    3. FEATURE: SPOTLIGHT PHOTO SWITCHER HELPER (SUPPORTS ALL 6 PHOTOS)
 ---------------------------------------------------- */
-const spotlightCaptions = {
-  1: '"Forehead Kiss & Forever Love" 💋',
-  2: '"Traditional Grace & Elegance" 👑',
-  3: '"Side by Side Always & Forever" 💜',
-  4: '"In your arms, I have found my home." ❤️',
-  5: '"Watching the sunset with you, my forever light." 🌅',
-  6: '"Side-by-side, making every path feel like paradise!" ✌️💖'
-};
-
 let currentSpotlightIdx = 1;
 
 function switchSpotlightPhoto(photoIdx) {
@@ -1201,63 +1192,34 @@ function updateMusicUI() {
   }
 }
 
-function unboxSurprise(e) {
-  // 1. Instantly hide unboxing overlay and show main hub
+function unboxSurprise() {
+  if (isUnboxed) return;
+  isUnboxed = true;
+
+  playBackgroundMusic();
+
+  if (typeof gsap !== 'undefined' && giftLidMesh && giftBoxGroup) {
+    gsap.timeline()
+      .to(giftLidMesh.position, { y: 3.5, duration: 0.8, ease: "power2.out" })
+      .to(giftLidMesh.rotation, { x: -Math.PI / 3, z: Math.PI / 4, duration: 0.8, ease: "power2.out" }, "-=0.6")
+      .to(giftBoxGroup.position, { y: -10, opacity: 0, duration: 1, ease: "power2.in" }, "+=0.2");
+  }
+
   const overlay = document.getElementById('unboxing-overlay');
   const mainHub = document.getElementById('main-hub');
   const navbar = document.querySelector('.navbar');
 
   if (overlay) {
     overlay.classList.add('hidden');
-    overlay.style.opacity = '0';
-    overlay.style.pointerEvents = 'none';
-    overlay.style.visibility = 'hidden';
     setTimeout(() => {
       overlay.style.display = 'none';
-    }, 300);
+    }, 400);
   }
-  if (mainHub) {
-    mainHub.classList.add('visible');
-    mainHub.style.opacity = '1';
-    mainHub.style.pointerEvents = 'auto';
-    mainHub.style.transform = 'translateY(0)';
-  }
-  if (navbar) {
-    navbar.classList.add('visible');
-    navbar.style.opacity = '1';
-    navbar.style.pointerEvents = 'auto';
-  }
+  if (mainHub) mainHub.classList.add('visible');
+  if (navbar) navbar.classList.add('visible');
 
-  if (isUnboxed) return;
-  isUnboxed = true;
-
-  // 2. Play 3D gift box animation
-  if (typeof gsap !== 'undefined' && giftLidMesh && giftBoxGroup) {
-    try {
-      gsap.timeline()
-        .to(giftLidMesh.position, { y: 3.5, duration: 0.8, ease: "power2.out" })
-        .to(giftLidMesh.rotation, { x: -Math.PI / 3, z: Math.PI / 4, duration: 0.8, ease: "power2.out" }, "-=0.6")
-        .to(giftBoxGroup.position, { y: -10, opacity: 0, duration: 1, ease: "power2.in" }, "+=0.2");
-    } catch (err) {
-      console.warn('GSAP gift box animation error:', err);
-    }
-  }
-
-  // 3. Play background music safely
-  try {
-    playBackgroundMusic();
-  } catch (err) {
-    console.warn('Music autoplay error:', err);
-  }
-
-  // 4. Trigger confetti fireworks safely
-  try {
-    triggerConfettiFireworks();
-  } catch (err) {
-    console.warn('Confetti error:', err);
-  }
+  triggerConfettiFireworks();
 }
-window.unboxSurprise = unboxSurprise;
 
 function blowOutCandles() {
   if (!candlesLit) return;
@@ -1354,11 +1316,7 @@ function loadSavedPhotos() {
 
 function setupEventListeners() {
   const openBoxBtn = document.getElementById('open-box-btn');
-  if (openBoxBtn) {
-    openBoxBtn.onclick = function(e) {
-      unboxSurprise(e);
-    };
-  }
+  if (openBoxBtn) openBoxBtn.addEventListener('click', unboxSurprise);
 
   const blowBtn = document.getElementById('blow-candles-btn');
   if (blowBtn) blowBtn.addEventListener('click', blowOutCandles);
@@ -1566,8 +1524,8 @@ const galleryCaptions = {
   2: 'Traditional Grace & Elegance 👑',
   3: 'Side by Side Always & Forever 💜',
   4: 'Swept Off Your Feet & Deeply Loved ✨',
-  5: 'Sunset Silhouette & Serene Peace 🌅',
-  6: 'Side-by-Side Smiles & Pure Joy ✌️💖'
+  5: 'Walking Into Forever Together 🌅',
+  6: 'Our Endless Happiness & Joy 💞'
 };
 
 function openLightbox(slotIndex) {
