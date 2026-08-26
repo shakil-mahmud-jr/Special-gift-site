@@ -713,12 +713,17 @@ function initPhotoCubeScene() {
   const canvas = document.getElementById('photo-cube-canvas');
   if (!canvas || typeof THREE === 'undefined') return;
 
+  const wrapper = canvas.parentElement;
+  const w = wrapper ? wrapper.clientWidth : canvas.clientWidth;
+  const h = wrapper ? wrapper.clientHeight : canvas.clientHeight;
+
   cubeScene = new THREE.Scene();
-  cubeCamera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
-  cubeCamera.position.set(0, 0, 5.2);
+  cubeCamera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100);
+  const initialCamZ = window.innerWidth < 640 ? 6.4 : 5.4;
+  cubeCamera.position.set(0, 0, initialCamZ);
 
   cubeRenderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
-  cubeRenderer.setSize(canvas.clientWidth, canvas.clientHeight);
+  cubeRenderer.setSize(w, h);
   cubeRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
   // True-color natural lighting (1.0 intensity, zero color distortion)
@@ -732,7 +737,7 @@ function initPhotoCubeScene() {
     cubeMaterials.push(new THREE.MeshBasicMaterial({ map: tex }));
   }
 
-  const geometry = new THREE.BoxGeometry(2.1, 2.1, 2.1);
+  const geometry = new THREE.BoxGeometry(1.9, 1.9, 1.9);
   photoCubeMesh = new THREE.Mesh(geometry, cubeMaterials);
   cubeScene.add(photoCubeMesh);
 
@@ -1362,6 +1367,19 @@ function onWindowResize() {
     cakeCamera.aspect = container.clientWidth / container.clientHeight;
     cakeCamera.updateProjectionMatrix();
     cakeRenderer.setSize(container.clientWidth, container.clientHeight);
+  }
+
+  const cubeCanvas = document.getElementById('photo-cube-canvas');
+  if (cubeCanvas && cubeCamera && cubeRenderer) {
+    const wrapper = cubeCanvas.parentElement;
+    if (wrapper) {
+      const w = wrapper.clientWidth;
+      const h = wrapper.clientHeight;
+      cubeCamera.aspect = w / h;
+      cubeCamera.position.z = window.innerWidth < 640 ? 6.4 : 5.4;
+      cubeCamera.updateProjectionMatrix();
+      cubeRenderer.setSize(w, h);
+    }
   }
 }
 
